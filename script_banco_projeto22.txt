@@ -1,0 +1,72 @@
+### INICIO DO SCRIPT ###
+
+#CRIA A BASE
+CREATE DATABASE projeto22;
+USE projeto22;
+
+#CRIA A TABELA DE USUARIOS
+CREATE TABLE usuarios(
+    usu_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    usu_nome VARCHAR(50) NOT NULL,
+    usu_senha VARCHAR(50) NOT NULL,
+    usu_ativo CHAR(1)
+    );
+
+#CRIA A TABELA DE PRODUTOS
+CREATE TABLE produtos(
+    pro_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    pro_nome VARCHAR(100),
+    pro_descricao VARCHAR(200),
+    pro_quantidade INT,
+    pro_custo DECIMAL (10,2),
+    pro_preco DECIMAL(10,2),
+    pro_ativo CHAR(1),
+    imagem1 LONGBLOB
+    );
+
+#CRIA A TABELA DE CLIENTES
+CREATE TABLE clientes(
+    cli_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cli_cpf BIGINT,
+    cli_nome VARCHAR(50),
+    cli_senha VARCHAR(50),
+    cli_datanasc DATE,
+    cli_telefone BIGINT,
+    cli_logradouro VARCHAR(100),
+    cli_numero VARCHAR(10),
+    cli_cidade VARCHAR(50),
+    cli_ativo CHAR(1)
+    );
+
+#CRIAR TABELA DE VENDAS
+CREATE TABLE vendas(
+    ven_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ven_valorvenda DECIMAL(10,2),
+    ven_datavenda DATE,
+    fk_cli_id INT,
+    fk_pro_id INT,
+    fk_carrinho_id INT
+    );
+    
+#CRIA TABELA CARRINHO
+CREATE TABLE itens_carrinho(
+    car_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    fk_pro_id INT,
+    fk_cli_id INT,
+    car_item_quantidade INT,
+    car_total_carrinho DECIMAL(10,2),
+    car_numero_carrinho VARCHAR(50),
+    car_finalizado CHAR(1)
+    );
+
+#RELACIONAMENTOS
+ALTER TABLE itens_carrinho ADD CONSTRAINT fk_cli_id_carrinho FOREIGN KEY (fk_cli_id) REFERENCES clientes(cli_id);
+ALTER TABLE itens_carrinho ADD CONSTRAINT fk_pro_id_carrinho FOREIGN KEY (fk_pro_id) REFERENCES produtos(pro_id);
+
+ALTER TABLE vendas ADD CONSTRAINT fk_carrinho_id_ven FOREIGN KEY(fk_carrinho_id) REFERENCES itens_carrinho(car_id);
+ALTER TABLE vendas ADD CONSTRAINT fk_cli_id_ven FOREIGN KEY (fk_cli_id) REFERENCES clientes(cli_id);
+ALTER TABLE vendas ADD CONSTRAINT fk_pro_id_ven FOREIGN KEY (fk_pro_id) REFERENCES produtos(pro_id);
+
+
+
+
